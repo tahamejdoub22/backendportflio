@@ -14,6 +14,6 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "mongoose": "^7.8.4",
-    "nodemailer": "^6.9.11"
+    "node-mailjet": "^3.3.2"
   }
 }
