@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const mailjet = require('node-mailjet');
+const Mailjet = require('node-mailjet');
+
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Configure Mailjet with the provided API credentials
-const mailjetClient = mailjet.apiConnect(
+const mailjetClient = Mailjet.connect(
     'fa876ddf58272c9cd366f71e1d013c05',
     '6f1de5f1e532e21f5ead077375df2c1c'
 );
