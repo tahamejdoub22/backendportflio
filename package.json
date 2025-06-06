@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/basic.test.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mongoose": "^7.8.4"
+    "mongoose": "^7.8.4",
+    "nodemailer": "^6.9.11"
   }
 }
