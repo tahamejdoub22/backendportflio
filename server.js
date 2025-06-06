@@ -7,7 +7,10 @@ const nodemailer = require('nodemailer');
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://taha:taha@cluster0.po1evxm.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://mohamedtahamejdoub:3b0opEVv2myTMCTY@cluster0.reloxqg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
