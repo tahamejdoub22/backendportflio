@@ -37,6 +37,18 @@ const ContactSchema = new mongoose.Schema({
   
 const Contact = mongoose.model('Contact', ContactSchema);
 
+// Utility to generate a nicely formatted HTML email for contact requests
+function createEmailHTML(contact) {
+    return `\n        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+            <h2 style="background-color: #f2f2f2; padding: 10px; text-align: center;">New Contact Request</h2>
+            <p><strong>Name:</strong> ${contact.name}</p>
+            <p><strong>Email:</strong> ${contact.email}</p>
+            <p><strong>Subject:</strong> ${contact.subject}</p>
+            <p><strong>Message:</strong></p>
+            <p>${contact.message}</p>
+        </div>`;
+}
+
 // Routes
 app.post('/submit', async (req, res) => {
     // Form validation can be added here
@@ -57,10 +69,14 @@ app.post('/submit', async (req, res) => {
             .request({
                 Messages: [
                     {
-                        From: { Email: 'no-reply@example.com', Name: 'Portfolio Contact' },
+                        // Send the email from the address provided by the user
+                        From: { Email: newContact.email, Name: newContact.name },
+                        // Always send the message to the portfolio owner's inbox
                         To: [{ Email: 'mohamedtahamejdoub@gmail.com' }],
                         Subject: 'New contact request',
-                        TextPart: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`
+                        TextPart: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`,
+                        // Use a styled HTML email template for better readability
+                        HTMLPart: createEmailHTML(newContact)
                     }
                 ]
             });
