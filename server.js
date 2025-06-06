@@ -57,7 +57,9 @@ app.post('/submit', async (req, res) => {
             .request({
                 Messages: [
                     {
-                        From: { Email: 'no-reply@example.com', Name: 'Portfolio Contact' },
+                        // Send the email from the address provided by the user
+                        From: { Email: newContact.email, Name: newContact.name },
+                        // Always send the message to the portfolio owner's inbox
                         To: [{ Email: 'mohamedtahamejdoub@gmail.com' }],
                         Subject: 'New contact request',
                         TextPart: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`
