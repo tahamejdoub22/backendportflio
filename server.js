@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const Mailjet = require('node-mailjet');
 
 const app = express();
 
@@ -19,14 +19,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-// Configure nodemailer transporter
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'mohamedtahamejdoub@gmail.com',
-        pass: process.env.EMAIL_PASSWORD // set this environment variable
-    }
-});
+// Configure Mailjet with the provided API credentials
+const mailjetClient = Mailjet.connect(
+    'fa876ddf58272c9cd366f71e1d013c05',
+    '6f1de5f1e532e21f5ead077375df2c1c'
+);
 
 // Define Mongoose schema and model
 const ContactSchema = new mongoose.Schema({
@@ -53,14 +50,19 @@ app.post('/submit', async (req, res) => {
     try {
         await newContact.save();
 
-        const mailOptions = {
-            from: 'mohamedtahamejdoub@gmail.com',
-            to: 'mohamedtahamejdoub@gmail.com',
-            subject: 'New contact request',
-            text: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`
-        };
-
-        await transporter.sendMail(mailOptions);
+        // Send notification email with Mailjet
+        await mailjetClient
+            .post('send', { version: 'v3.1' })
+            .request({
+                Messages: [
+                    {
+                        From: { Email: 'no-reply@example.com', Name: 'Portfolio Contact' },
+                        To: [{ Email: 'mohamedtahamejdoub@gmail.com' }],
+                        Subject: 'New contact request',
+                        TextPart: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`
+                    }
+                ]
+            });
 
         res.json({ message: 'Form submitted successfully!' });
     } catch (err) {
