@@ -62,6 +62,7 @@ function createEmailHTML(contact) {
                     <td style="padding:8px;">${contact.message}</td>
                 </tr>
             </table>
+
         </div>`;
 }
 
