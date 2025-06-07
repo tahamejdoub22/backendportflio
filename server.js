@@ -39,13 +39,30 @@ const Contact = mongoose.model('Contact', ContactSchema);
 
 // Utility to generate a nicely formatted HTML email for contact requests
 function createEmailHTML(contact) {
-    return `\n        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
-            <h2 style="background-color: #f2f2f2; padding: 10px; text-align: center;">New Contact Request</h2>
-            <p><strong>Name:</strong> ${contact.name}</p>
-            <p><strong>Email:</strong> ${contact.email}</p>
-            <p><strong>Subject:</strong> ${contact.subject}</p>
-            <p><strong>Message:</strong></p>
-            <p>${contact.message}</p>
+    return `
+        <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto; border:1px solid #ddd; padding:20px;">
+            <div style="background:#f4f4f4; padding:10px 0; text-align:center; margin-bottom:20px;">
+                <h2 style="margin:0; color:#333;">New Contact Request</h2>
+            </div>
+            <table style="width:100%; border-collapse:collapse;">
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #eee;"><strong>Name:</strong></td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">${contact.name}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #eee;"><strong>Email:</strong></td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">${contact.email}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #eee;"><strong>Subject:</strong></td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">${contact.subject}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; vertical-align:top;"><strong>Message:</strong></td>
+                    <td style="padding:8px;">${contact.message}</td>
+                </tr>
+            </table>
+
         </div>`;
 }
 
