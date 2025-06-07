@@ -37,6 +37,34 @@ const ContactSchema = new mongoose.Schema({
   
 const Contact = mongoose.model('Contact', ContactSchema);
 
+// Utility to generate a nicely formatted HTML email for contact requests
+function createEmailHTML(contact) {
+    return `
+        <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto; border:1px solid #ddd; padding:20px;">
+            <div style="background:#f4f4f4; padding:10px 0; text-align:center; margin-bottom:20px;">
+                <h2 style="margin:0; color:#333;">New Contact Request</h2>
+            </div>
+            <table style="width:100%; border-collapse:collapse;">
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #eee;"><strong>Name:</strong></td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">${contact.name}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #eee;"><strong>Email:</strong></td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">${contact.email}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #eee;"><strong>Subject:</strong></td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">${contact.subject}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; vertical-align:top;"><strong>Message:</strong></td>
+                    <td style="padding:8px;">${contact.message}</td>
+                </tr>
+            </table>
+        </div>`;
+}
+
 // Routes
 app.post('/submit', async (req, res) => {
     // Form validation can be added here
@@ -57,10 +85,14 @@ app.post('/submit', async (req, res) => {
             .request({
                 Messages: [
                     {
-                        From: { Email: 'no-reply@example.com', Name: 'Portfolio Contact' },
+                        // Send the email from the address provided by the user
+                        From: { Email: newContact.email, Name: newContact.name },
+                        // Always send the message to the portfolio owner's inbox
                         To: [{ Email: 'mohamedtahamejdoub@gmail.com' }],
                         Subject: 'New contact request',
-                        TextPart: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`
+                        TextPart: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`,
+                        // Use a styled HTML email template for better readability
+                        HTMLPart: createEmailHTML(newContact)
                     }
                 ]
             });
