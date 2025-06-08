@@ -101,6 +101,7 @@ app.post('/submit', async (req, res) => {
                             Email: process.env.MAIL_FROM || 'mohamedtahamejdoub@gmail.com',
                             Name: 'Portfolio Contact'
                         },
+
                         ReplyTo: { Email: newContact.email, Name: newContact.name },
                         // Always send the message to the portfolio owner's inbox
                         To: [{ Email: process.env.MAIL_TO || 'mohamedtahamejdoub@gmail.com' }],
