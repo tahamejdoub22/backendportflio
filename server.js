@@ -96,10 +96,14 @@ app.post('/submit', async (req, res) => {
             .request({
                 Messages: [
                     {
-                        // Send the email from the address provided by the user
-                        From: { Email: newContact.email, Name: newContact.name },
+                        // Use a configurable verified sender address; set user's email as reply-to
+                        From: {
+                            Email: process.env.MAIL_FROM || 'mohamedtahamejdoub@gmail.com',
+                            Name: 'Portfolio Contact'
+                        },
+                        ReplyTo: { Email: newContact.email, Name: newContact.name },
                         // Always send the message to the portfolio owner's inbox
-                        To: [{ Email: 'mohamedtahamejdoub@gmail.com' }],
+                        To: [{ Email: process.env.MAIL_TO || 'mohamedtahamejdoub@gmail.com' }],
                         Subject: 'New contact request',
                         TextPart: `Name: ${newContact.name}\nEmail: ${newContact.email}\nSubject: ${newContact.subject}\nMessage: ${newContact.message}`,
                         // Use a styled HTML email template for better readability
